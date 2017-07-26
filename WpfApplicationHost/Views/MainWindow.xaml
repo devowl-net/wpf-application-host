@@ -1,0 +1,27 @@
+﻿<Window x:Class="WpfApplicationHost.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApplicationHost"
+        xmlns:viewModels="clr-namespace:WpfApplicationHost.ViewModels"
+        xmlns:controls="clr-namespace:WpfApplicationHost.Controls"
+        xmlns:models="clr-namespace:WpfApplicationHost.Models"
+        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <DataTemplate x:Key="TabItemTemplate">
+            <DockPanel>
+                <StackPanel MinHeight="50" Background="Red" DockPanel.Dock="Top">
+                    <Label Content="{Binding ElementName=applicationHost, Path=ErrorText}" />
+                </StackPanel>
+                <controls:ApplicationHost ApplicationPath="{Binding Path}" x:Name="applicationHost" />
+            </DockPanel>
+        </DataTemplate>
+        <Style x:Key="TabItemStyle" TargetType="{x:Type TabItem}">
+            <Setter Property="Header" Value="{Binding ApplicationName}" />
+        </Style>
+    </Window.Resources>
+    <TabControl ItemsSource="{Binding TabModels}" ContentTemplate="{StaticResource TabItemTemplate}" ItemContainerStyle="{StaticResource TabItemStyle}" /> 
+</Window>
