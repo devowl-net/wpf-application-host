@@ -97,5 +97,15 @@ namespace WpfApplicationHost.Windows
         /// <remarks>http://www.pinvoke.net/default.aspx/user32.SetWinEventHook</remarks>
         [DllImport("user32.dll")]
         public static extern IntPtr SetWinEventHook(WindowsEvents eventMin, WindowsEvents eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, int idProcess, int idThread, WindowsEvents dwFlags);
+
+        /// <summary>
+        /// Removes an event hook function created by a previous call to SetWinEventHook.
+        /// </summary>
+        /// <param name="hWinEventHook">Handle to the event hook returned in the previous call to SetWinEventHook.</param>
+        /// <returns>If successful, returns TRUE; otherwise, returns FALSE.</returns>
+        /// <remarks>http://www.pinvoke.net/default.aspx/user32/UnhookWinEvent.html</remarks>
+        /// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/dd373671(v=vs.85).aspx</remarks>
+        [DllImport("user32.dll")]
+        public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
     }
 }

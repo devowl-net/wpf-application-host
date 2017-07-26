@@ -5,7 +5,7 @@ using WpfApplicationHost.ViewModels;
 namespace WpfApplicationHost.Views
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for <see cref="MainWindow"/>.
     /// </summary>
     public partial class MainWindow : Window
     {

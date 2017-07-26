@@ -12,16 +12,23 @@
         Title="MainWindow" Height="350" Width="525">
     <Window.Resources>
         <DataTemplate x:Key="TabItemTemplate">
-            <DockPanel>
-                <StackPanel MinHeight="50" Background="Red" DockPanel.Dock="Top">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Border BorderThickness="1" BorderBrush="Gray">
+                    <controls:ApplicationHost ApplicationPath="{Binding Path}" x:Name="applicationHost" />
+                </Border>
+                <StackPanel MinHeight="25" Background="LightGray" DockPanel.Dock="Bottom" Grid.Row="1">
                     <Label Content="{Binding ElementName=applicationHost, Path=ErrorText}" />
                 </StackPanel>
-                <controls:ApplicationHost ApplicationPath="{Binding Path}" x:Name="applicationHost" />
-            </DockPanel>
+            </Grid>
         </DataTemplate>
         <Style x:Key="TabItemStyle" TargetType="{x:Type TabItem}">
             <Setter Property="Header" Value="{Binding ApplicationName}" />
         </Style>
     </Window.Resources>
+    <!-- Be to know TabControl reusing TabItems -->
     <TabControl ItemsSource="{Binding TabModels}" ContentTemplate="{StaticResource TabItemTemplate}" ItemContainerStyle="{StaticResource TabItemStyle}" /> 
 </Window>

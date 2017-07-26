@@ -42,6 +42,22 @@ namespace WpfApplicationHost.Controls
             typeof(ApplicationHost),
             new PropertyMetadata(default(string)));
 
+        private readonly ApplicationHostIntegration _applicationHostIntegration;
+
+        /// <summary>
+        /// <see cref="ApplicationHost"/> Constructor.
+        /// </summary>
+        public ApplicationHost()
+        {
+            _applicationHostIntegration = new ApplicationHostIntegration(this);
+            Application.Current.Exit += OnApplicationExit;
+        }
+
+        private void OnApplicationExit(object sender, ExitEventArgs e)
+        {
+            CurrentProcess?.Kill();
+        }
+
         /// <summary>
         /// Current error text.
         /// </summary>
@@ -114,7 +130,7 @@ namespace WpfApplicationHost.Controls
 
                 var startInfo = new ProcessStartInfo(ApplicationPath)
                 {
-                    WindowStyle = ProcessWindowStyle.Minimized,
+                    WindowStyle = ProcessWindowStyle.Normal,
                     UseShellExecute = false
                 };
 
@@ -136,16 +152,16 @@ namespace WpfApplicationHost.Controls
                     CurrentProcess.Kill();
                     return;
                 }
-
-                var appHost = new ApplicationHostIntegration(this);
-                appHost.AttachToProcess(CurrentProcess);
+                
+                _applicationHostIntegration.AttachToProcess(CurrentProcess);
+                ApplicationRunning = true;
             }
             catch (Exception exception)
             {
                 ErrorText = exception.Message;
             }
         }
-
+        
         private void OnCurrentProcessExited(object sender, EventArgs args)
         {
             ApplicationRunning = false;
