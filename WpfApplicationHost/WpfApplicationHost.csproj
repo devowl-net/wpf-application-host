@@ -60,6 +60,7 @@
     <Compile Include="Models\TabModel.cs" />
     <Compile Include="Windows\Structs\RECT.cs" />
     <Compile Include="Windows\Structs\WindowsEvents.cs" />
+    <Compile Include="Windows\Structs\WindowStyles.cs" />
     <Compile Include="Windows\Win32Api.cs" />
     <Compile Include="Windows\Structs\WindowsIndexStyle.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

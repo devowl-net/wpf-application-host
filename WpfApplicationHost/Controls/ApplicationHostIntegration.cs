@@ -40,6 +40,9 @@ namespace WpfApplicationHost.Controls
             // Set application PARENT to this control
             Win32Api.SetParent(_windowHandle, FormsHost.Handle);
 
+            // WS_VISIBLE - This style can be turned on and off by using the ShowWindow or SetWindowPos function.
+            Win32Api.SetWindowLong(_windowHandle, WindowsIndexStyle.GWL_STYLE, WindowStyles.WS_VISIBLE);
+
             // Move window to left top corner. Set Width and Height equals to control size
             ResizeChild();
 
@@ -47,14 +50,17 @@ namespace WpfApplicationHost.Controls
             var hookDelegate = new WinEventDelegate(Hook);
             GCHandle.Alloc(hookDelegate);
 
+            // Window thread id
+            int threadId = Win32Api.GetWindowThreadProcessId(_windowHandle, IntPtr.Zero);
+
             // Set hook function on window events
             _currentHook = Win32Api.SetWinEventHook(
-                WindowsEvents.WINEVENT_OUTOFCONTEXT,
-                WindowsEvents.EVENT_AIA_END,
+                WindowsEvents.WINEVENT_SKIPOWNTHREAD,
+                WindowsEvents.EVENT_MAX,
                 IntPtr.Zero,
                 hookDelegate,
                 0,
-                0,
+                threadId,
                 WindowsEvents.WINEVENT_OUTOFCONTEXT);
         }
 
@@ -69,7 +75,7 @@ namespace WpfApplicationHost.Controls
         }
 
         private void Hook(
-            IntPtr hWinEventHook,
+            WindowsEvents winEvent,
             uint eventType,
             IntPtr hwnd,
             int idObject,
@@ -77,7 +83,7 @@ namespace WpfApplicationHost.Controls
             uint dwEventThread,
             uint dwmsEventTime)
         {
-            Trace.WriteLine($"-> {hWinEventHook} : {eventType} : idObject={idObject}: idChild={idChild}");
+            Trace.WriteLine($"-> {winEvent.ToString()} : {eventType} : idObject={idObject}: idChild={idChild}");
         }
     }
 }

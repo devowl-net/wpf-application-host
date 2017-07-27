@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms.Integration;
+using System.Windows.Threading;
 
 namespace WpfApplicationHost.Controls
 {
@@ -164,7 +165,10 @@ namespace WpfApplicationHost.Controls
         
         private void OnCurrentProcessExited(object sender, EventArgs args)
         {
-            ApplicationRunning = false;
+            Dispatcher.Invoke(new Action(() =>
+            {
+                ApplicationRunning = false;
+            }));
         }
 
         private bool Validate()

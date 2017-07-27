@@ -9,7 +9,7 @@ namespace WpfApplicationHost.Windows
     /// Callback used by SetWinEventHook.
     /// </summary>
     /// <remarks>http://www.pinvoke.net/default.aspx/user32/WinEventDelegate.html</remarks>
-    public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+    public delegate void WinEventDelegate(WindowsEvents winEvent, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
 
     /// <summary>
     /// Contains Windows API methods.
@@ -49,7 +49,7 @@ namespace WpfApplicationHost.Windows
         /// </returns>
         /// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/ms644898(v=vs.85).aspx</remarks>
         [DllImport("user32.dll")]
-        public static extern uint SetWindowLong(IntPtr hWnd, WindowsIndexStyle nIndex, uint dwNewLong);
+        public static extern uint SetWindowLong(IntPtr hWnd, WindowsIndexStyle nIndex, WindowStyles dwNewLong);
 
         /// <summary>
         ///     The MoveWindow function changes the position and dimensions of the specified window. For a top-level window, the
@@ -107,5 +107,14 @@ namespace WpfApplicationHost.Windows
         /// <remarks>https://msdn.microsoft.com/en-us/library/windows/desktop/dd373671(v=vs.85).aspx</remarks>
         [DllImport("user32.dll")]
         public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
+
+        /// <summary>
+        /// Retrieves the identifier of the thread that created the specified window and, optionally, the identifier of the process that created the window. 
+        /// </summary>
+        /// <param name="hWnd">A handle to the window. </param>
+        /// <param name="ProcessId">A pointer to a variable that receives the process identifier. If this parameter is not NULL, GetWindowThreadProcessId copies the identifier of the process to the variable; otherwise, it does not.</param>
+        /// <returns>The return value is the identifier of the thread that created the window. </returns>
+        [DllImport("user32.dll")]
+        public static extern int GetWindowThreadProcessId(IntPtr hWnd, IntPtr ProcessId);
     }
 }
