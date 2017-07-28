@@ -1,10 +1,10 @@
-﻿namespace WpfApplicationHost.Windows.Structs
+﻿namespace HostControlLibary.Windows.Structs
 {
     /// <summary>
     /// Windows styles.
     /// </summary>
     /// <remarks>http://www.pinvoke.net/default.aspx/Constants.GWL%20-%20GetWindowLong</remarks>
-    public enum WindowsIndexStyle
+    internal enum WindowsIndexStyle
     {
         /// <summary>Sets a new address for the window procedure.</summary>
         /// <remarks>You cannot change this attribute if the window does not belong to the same process as the calling thread.</remarks>

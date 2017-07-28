@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -48,21 +49,13 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\ApplicationHost.cs" />
-    <Compile Include="Controls\ApplicationHostIntegration.cs" />
     <Compile Include="Models\TabModel.cs" />
-    <Compile Include="Windows\Structs\RECT.cs" />
-    <Compile Include="Windows\Structs\WindowsEvents.cs" />
-    <Compile Include="Windows\Structs\WindowStyles.cs" />
-    <Compile Include="Windows\Win32Api.cs" />
-    <Compile Include="Windows\Structs\WindowsIndexStyle.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -100,7 +93,12 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Controls\HostControlLibary.csproj">
+      <Project>{6A62809D-4E85-44B3-97CD-913BAECF7E97}</Project>
+      <Name>HostControlLibary</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

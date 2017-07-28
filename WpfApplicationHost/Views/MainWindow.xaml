@@ -3,13 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApplicationHost"
         xmlns:viewModels="clr-namespace:WpfApplicationHost.ViewModels"
-        xmlns:controls="clr-namespace:WpfApplicationHost.Controls"
-        xmlns:models="clr-namespace:WpfApplicationHost.Models"
+        xmlns:hostControls="clr-namespace:HostControlLibary.Controls;assembly=HostControlLibary"
         d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="Example" Height="350" Width="525">
     <Window.Resources>
         <DataTemplate x:Key="TabItemTemplate">
             <Grid>
@@ -18,7 +16,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Border BorderThickness="1" BorderBrush="Gray">
-                    <controls:ApplicationHost ApplicationPath="{Binding Path}" x:Name="applicationHost" />
+                    <hostControls:ApplicationHost ApplicationPath="{Binding Path}" x:Name="applicationHost" />
                 </Border>
                 <StackPanel MinHeight="25" Background="LightGray" DockPanel.Dock="Bottom" Grid.Row="1">
                     <Label Content="{Binding ElementName=applicationHost, Path=ErrorText}" />

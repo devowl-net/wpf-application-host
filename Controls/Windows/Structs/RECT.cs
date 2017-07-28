@@ -1,9 +1,9 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace WpfApplicationHost.Windows.Structs
+namespace HostControlLibary.Windows.Structs
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct RECT
+    internal struct RECT
     {
         public int Left;        // x position of upper-left corner
         public int Top;         // y position of upper-left corner

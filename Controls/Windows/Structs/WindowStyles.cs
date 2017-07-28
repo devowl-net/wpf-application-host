@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WpfApplicationHost.Windows.Structs
+namespace HostControlLibary.Windows.Structs
 {
     /// <summary>
     /// Window Styles.
@@ -8,7 +8,7 @@ namespace WpfApplicationHost.Windows.Structs
     /// <remarks>https://msdn.microsoft.com/ru-ru/library/windows/desktop/ms632600(v=vs.85).aspx</remarks>
     /// <remarks>http://www.pinvoke.net/default.aspx/Constants.Window%20styles</remarks>
     [Flags]
-    public enum WindowStyles : uint
+    internal enum WindowStyles : uint
     {
         WS_OVERLAPPED = 0x00000000,
         WS_POPUP = 0x80000000,

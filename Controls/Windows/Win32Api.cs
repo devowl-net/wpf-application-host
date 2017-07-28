@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-using WpfApplicationHost.Windows.Structs;
+using HostControlLibary.Windows.Structs;
 
-namespace WpfApplicationHost.Windows
+namespace HostControlLibary.Windows
 {
     /// <summary>
     /// Callback used by SetWinEventHook.
     /// </summary>
     /// <remarks>http://www.pinvoke.net/default.aspx/user32/WinEventDelegate.html</remarks>
-    public delegate void WinEventDelegate(WindowsEvents winEvent, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+    internal delegate void WinEventDelegate(WindowsEvents winEvent, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
 
     /// <summary>
     /// Contains Windows API methods.
     /// </summary>
-    public class Win32Api
+    internal class Win32Api
     {
         /// <summary>
         /// Retrieves the dimensions of the bounding rectangle of the specified window. The dimensions are given in screen coordinates that are relative to the upper-left corner of the screen.

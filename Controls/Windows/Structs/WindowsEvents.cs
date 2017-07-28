@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WpfApplicationHost.Windows.Structs
+namespace HostControlLibary.Windows.Structs
 {
     /// <summary>
     /// Windows events.
@@ -8,7 +8,7 @@ namespace WpfApplicationHost.Windows.Structs
     /// <remarks>https://msdn.microsoft.com/ru-ru/library/windows/desktop/dd318066%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396</remarks>
     /// <remarks>http://www.pinvoke.net/default.aspx/user32.SetWinEventHook</remarks>
     [Flags]
-    public enum WindowsEvents
+    internal enum WindowsEvents
     {
         WINEVENT_OUTOFCONTEXT = 0x0000, // Events are ASYNC
 
