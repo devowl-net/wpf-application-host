@@ -46,9 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\ApplicationHost.cs" />
-    <Compile Include="Controls\ApplicationHostForm.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="Controls\ApplicationHostIntegration.cs" />
     <Compile Include="Data\ApplicationState.cs" />
     <Compile Include="Data\ApplicationStateEventArgs.cs" />

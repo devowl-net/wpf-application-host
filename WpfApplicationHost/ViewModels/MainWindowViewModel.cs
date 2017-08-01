@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using WpfApplicationHost.Models;
 using WpfApplicationHost.Views;
@@ -15,8 +16,8 @@ namespace WpfApplicationHost.ViewModels
         /// </summary>
         public IEnumerable<TabModel> TabModels { get; private set; } = new[]
         {
-            new TabModel("Notepad", @"C:\Windows\System32\notepad.exe"),
-            new TabModel("Calculator", @"C:\Windows\System32\calc.exe")
+            new TabModel("Notepad", $@"{Environment.GetFolderPath(Environment.SpecialFolder.Windows)}\System32\notepad.exe"),
+            new TabModel("Regedit", $@"{Environment.GetFolderPath(Environment.SpecialFolder.Windows)}\regedit.exe")
         };
     }
 }

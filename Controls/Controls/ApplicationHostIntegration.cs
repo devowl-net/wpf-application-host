@@ -3,12 +3,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using System.Windows.Threading;
 
 using HostControlLibary.Data;
 using HostControlLibary.Windows;
 using HostControlLibary.Windows.Structs;
+
+using Application = System.Windows.Application;
 
 namespace HostControlLibary.Controls
 {
@@ -30,11 +33,11 @@ namespace HostControlLibary.Controls
         {
             FormsHost = formsHost;
             FormsHost.SizeChanged += (a, e) => ResizeChild();
-            FormsHost.Child = FormsHostUserControl = new ApplicationHostForm();
+            FormsHost.Child = FormsHostUserControl = new UserControl(); 
             Application.Current.Exit += OnApplicationExit;
         }
 
-        private ApplicationHostForm FormsHostUserControl { get; set; }
+        private UserControl FormsHostUserControl { get; set; }
 
         private void OnApplicationExit(object sender, ExitEventArgs e)
         {
@@ -174,7 +177,7 @@ namespace HostControlLibary.Controls
 
         private void ResizeChild()
         {
-            Win32Api.MoveWindow(_windowHandle, 0, 0, (int)FormsHost.ActualWidth, (int)FormsHost.ActualHeight, true);
+            //Win32Api.MoveWindow(_windowHandle, 0, 0, (int)FormsHost.ActualWidth, (int)FormsHost.ActualHeight, true);
         }
 
         private void Detach()
