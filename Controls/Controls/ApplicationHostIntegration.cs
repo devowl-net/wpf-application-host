@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Management;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
@@ -25,7 +29,7 @@ namespace HostControlLibary.Controls
         private IntPtr _currentHook = IntPtr.Zero;
 
         private IntPtr _windowHandle = IntPtr.Zero;
-
+        
         /// <summary>
         /// <see cref="ApplicationHostIntegration"/> Constructor.
         /// </summary>
@@ -91,6 +95,7 @@ namespace HostControlLibary.Controls
         /// </summary>
         /// <param name="applicationPath">Application path.</param>
         /// <param name="errorText">Error text.</param>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public bool TryStartApplication(string applicationPath, out string errorText)
         {
             errorText = string.Empty;
@@ -111,8 +116,15 @@ namespace HostControlLibary.Controls
 
                 if (CurrentProcess.HasExited)
                 {
-                    errorText = "Unexpected application termination";
-                    return false;
+                    Process childProcess;
+                    
+                    // Process terminated before idle state. The reason can be start of another process.
+                    if (!TryGetChildProcess(CurrentProcess.Id, out childProcess, out errorText))
+                    {
+                        return false;
+                    }
+
+                    CurrentProcess = childProcess;
                 }
 
                 if (CurrentProcess.MainWindowHandle == IntPtr.Zero)
@@ -132,6 +144,35 @@ namespace HostControlLibary.Controls
             }
 
             return false;
+        }
+
+        private static bool TryGetChildProcess(int parentId, out Process childProcess, out string error)
+        {
+            childProcess = null;
+            error = null;
+            var searcher = new ManagementObjectSearcher($"SELECT * FROM Win32_Process WHERE ParentProcessID={parentId}");
+            var childrenProcessesIds = new List<int>();
+            
+            foreach (var managementObject in searcher.Get().OfType<ManagementObject>())
+            {
+                childrenProcessesIds.Add(Convert.ToInt32(managementObject["ProcessID"]));
+            }
+
+            if (!childrenProcessesIds.Any())
+            {
+                return false;
+            }
+
+            if (childrenProcessesIds.Count > 1)
+            {
+                error = $"Process owner {parentId} have {childrenProcessesIds.Count} children processes";
+                return false;
+            }
+
+            var processes = Process.GetProcesses();
+            childProcess = processes.First(process => process.Id == childrenProcessesIds.Single());
+            childProcess.WaitForInputIdle(30000);
+            return true;
         }
 
         private void OnCurrentProcessExited(object sender, EventArgs e)
@@ -177,7 +218,7 @@ namespace HostControlLibary.Controls
 
         private void ResizeChild()
         {
-            //Win32Api.MoveWindow(_windowHandle, 0, 0, (int)FormsHost.ActualWidth, (int)FormsHost.ActualHeight, true);
+            Win32Api.MoveWindow(_windowHandle, 0, 0, (int)FormsHost.ActualWidth, (int)FormsHost.ActualHeight, true);
         }
 
         private void Detach()

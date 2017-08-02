@@ -17,7 +17,8 @@ namespace WpfApplicationHost.ViewModels
         public IEnumerable<TabModel> TabModels { get; private set; } = new[]
         {
             new TabModel("Notepad", $@"{Environment.GetFolderPath(Environment.SpecialFolder.Windows)}\System32\notepad.exe"),
-            new TabModel("Regedit", $@"{Environment.GetFolderPath(Environment.SpecialFolder.Windows)}\regedit.exe")
+            new TabModel("Regedit", $@"{Environment.GetFolderPath(Environment.SpecialFolder.Windows)}\regedit.exe"),
+            new TabModel("Write", $@"{Environment.GetFolderPath(Environment.SpecialFolder.Windows)}\write.exe")
         };
     }
 }
