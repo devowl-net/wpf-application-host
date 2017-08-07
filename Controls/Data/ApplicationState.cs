@@ -3,7 +3,7 @@
     /// <summary>
     /// Application states.
     /// </summary>
-    public enum ApplicationState
+    internal enum ApplicationState
     {
         Started,
 

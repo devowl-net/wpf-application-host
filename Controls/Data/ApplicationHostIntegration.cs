@@ -6,24 +6,25 @@ using System.Linq;
 using System.Management;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
-using System.Windows.Threading;
 
-using HostControlLibary.Data;
 using HostControlLibary.Windows;
 using HostControlLibary.Windows.Structs;
 
 using Application = System.Windows.Application;
 
-namespace HostControlLibary.Controls
+namespace HostControlLibary.Data
 {
     /// <summary>
     /// <see cref="WindowsFormsHost"/> integration with external application.
     /// </summary>
     internal sealed class ApplicationHostIntegration
     {
+        private readonly int _mainWindowShowTimeout;
+
         private const string ExecutableFile = ".exe";
 
         private IntPtr _currentHook = IntPtr.Zero;
@@ -33,8 +34,9 @@ namespace HostControlLibary.Controls
         /// <summary>
         /// <see cref="ApplicationHostIntegration"/> Constructor.
         /// </summary>
-        public ApplicationHostIntegration(WindowsFormsHost formsHost)
+        public ApplicationHostIntegration(WindowsFormsHost formsHost, int mainWindowShowTimeoutSeconds)
         {
+            _mainWindowShowTimeout = mainWindowShowTimeoutSeconds;
             FormsHost = formsHost;
             FormsHost.SizeChanged += (a, e) => ResizeChild();
             FormsHost.Child = FormsHostUserControl = new UserControl(); 
@@ -81,7 +83,7 @@ namespace HostControlLibary.Controls
             return true;
         }
 
-        private ProcessStartInfo CreateProcessInfo(string applicationPath)
+        private static ProcessStartInfo CreateProcessInfo(string applicationPath)
         {
             return new ProcessStartInfo(applicationPath)
             {
@@ -108,7 +110,11 @@ namespace HostControlLibary.Controls
 
                 var startInfo = CreateProcessInfo(applicationPath);
 
-                CurrentProcess = new Process() { StartInfo = startInfo, EnableRaisingEvents = true };
+                CurrentProcess = new Process
+                {
+                    StartInfo = startInfo,
+                    EnableRaisingEvents = true
+                };
 
                 CurrentProcess.Exited += OnCurrentProcessExited;
                 CurrentProcess.Start();
@@ -129,9 +135,20 @@ namespace HostControlLibary.Controls
 
                 if (CurrentProcess.MainWindowHandle == IntPtr.Zero)
                 {
-                    errorText = $"{nameof(Process.MainWindowHandle)} not founded";
-                    CurrentProcess.Kill();
-                    return false;
+                    double timer = _mainWindowShowTimeout * 1000;
+                    const double CheckDelay = 0.100;
+                    do
+                    {
+                        Thread.Sleep(TimeSpan.FromSeconds(CheckDelay));
+                        timer -= CheckDelay;
+                    } while (timer > 0 && CurrentProcess.MainWindowHandle == IntPtr.Zero);
+
+                    if (CurrentProcess.MainWindowHandle == IntPtr.Zero)
+                    {
+                        errorText = $"{nameof(Process.MainWindowHandle)} not founded";
+                        CurrentProcess.Kill();
+                        return false;
+                    }
                 }
 
                 AttachToProcess(CurrentProcess);
